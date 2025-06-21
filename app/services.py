@@ -1,6 +1,6 @@
 import db
 from .state import captured_pokemon
-from .utils import generate_uuid_from_number, format_pokemon, deduplicate_by_key
+from .utils import generate_uuid_from_number, format_pokemon, deduplicate_by_key, filter_pokemons_by_type
 
 def fetch_raw_data():
     """Fetch fresh data from DB and attach unique IDs."""
@@ -23,13 +23,7 @@ def fetch_raw_data():
 def get_pokemons(page, limit, sort, type_filter):
     pokemons_data = fetch_raw_data()
 
-    if type_filter:
-        pokemons_data = [
-            pokemon_data for pokemon_data in pokemons_data if type_filter.lower() in (
-                pokemon_data.get("type_one", "").lower(),
-                pokemon_data.get("type_two", "").lower()
-            )
-        ]
+    pokemons_data = filter_pokemons_by_type(pokemons_data, type_filter)
 
     pokemons_data = deduplicate_by_key(pokemons_data, key="number")
 

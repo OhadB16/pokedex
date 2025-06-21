@@ -44,3 +44,16 @@ def format_pokemon(pokemon_data):
         "spd": pokemon_data.get("speed"),
         "captured": pokemon_data["name"] in captured_pokemon,
     }
+    
+def filter_pokemons_by_type(pokemons_data, type_filter):
+    if not type_filter:
+        return pokemons_data
+
+    type_filter = type_filter.lower()
+    return [
+        pokemon for pokemon in pokemons_data
+        if type_filter in (
+            pokemon.get("type_one", "").lower(),
+            pokemon.get("type_two", "").lower()
+        )
+    ]
